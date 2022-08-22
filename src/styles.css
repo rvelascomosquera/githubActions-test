@@ -1,0 +1,19 @@
+html, body {
+  background-color: #21232a;
+  color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 90vh;
+}
+
+button {
+  width: 50px;
+  border-radius: 20px;
+  margin-right: 5px;
+
+
+}
