@@ -3,11 +3,11 @@ name: Testing
 on: 
   push:
     branches: 
-      - main
+      - master
 jobs:
   testing:
     run-on: ubuntu-latest
     steps: 
       - name: Echo the message
-      - run: echo "Bienvenido" 
-          
+        run: echo "Bienvenido" 
+
