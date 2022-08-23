@@ -8,7 +8,7 @@ on:
 jobs:
 
   avoid_redundancy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.10.0
@@ -16,7 +16,7 @@ jobs:
           access_token: ${{ github.token }}
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:
@@ -69,7 +69,7 @@ jobs:
 
   deploy: 
     needs: [test]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:
@@ -79,4 +79,3 @@ jobs:
           node-version: 16
       - name: Instal dependencies
         run: npm ic
-        
