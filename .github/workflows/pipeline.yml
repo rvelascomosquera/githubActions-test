@@ -1,9 +1,74 @@
 on:
   push:
     branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    types: [opened, synchronize]
 
 jobs:
-  deploy:
+
+  avoid_redundancy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          access_token: ${{ github.token }}
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+         fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Instal dependencies
+        run: npm ic
+      - name: instal EsLint
+        run: npm run lint
+
+  
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Instal dependencies
+        run: npm ic
+      - name: Build
+        run: npm run build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+  test:
+   needs: [lint, build]
+   runs-on: ubuntu-22.04
+   steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Instal dependencies
+        run: npm ic
+      - uses: actions/download-artifact@v3
+        with:
+         name: dist
+         path: dist
+      - name: Test
+        run: npm run test
+
+  deploy: 
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -14,9 +79,4 @@ jobs:
           node-version: 16
       - name: Instal dependencies
         run: npm ic
-      - name: instal EsLint
-        run: npm run lint
-      - name: Build
-        run: npm run build
-      - name: Test
-        run: npm run test
+        
